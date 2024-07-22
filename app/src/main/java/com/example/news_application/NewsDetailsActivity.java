@@ -18,6 +18,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.news_application.database.HistoryDbHelper;
+import com.example.news_application.entity.HistoryInfo;
+import com.example.news_application.entity.NewsInfo;
+import com.google.gson.Gson;
 
 import okhttp3.OkHttpClient;
 
@@ -58,8 +62,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
             Log.d(TAG, "Image: " + dataDTO.getImage());
             Log.d(TAG, "Video: " + dataDTO.getVideo());
             Log.d(TAG, "Content: " + dataDTO.getContent());
+            Log.d(TAG, "NewsID: " + dataDTO.getNewsID());
             newsDate.setText(dataDTO.getPublishTime());
             newsSource.setText(dataDTO.getPublisher());
+
+            String dataDTOJson = new Gson().toJson(dataDTO);
+            HistoryDbHelper.getInstance(NewsDetailsActivity.this).addHistory(null, dataDTO.getNewsID(), dataDTOJson);
 
             String content = dataDTO.getContent();
             if (content != null && !content.isEmpty()) {

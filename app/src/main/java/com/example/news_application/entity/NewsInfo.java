@@ -1,10 +1,9 @@
-package com.example.news_application;
+package com.example.news_application.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class NewsInfo {
@@ -75,6 +74,7 @@ public class NewsInfo {
             video = in.readString();
             content = in.readString();
             publisher = in.readString();
+            newsID = in.readString();
         }
 
         public static final Creator<DataDTO> CREATOR = new Creator<DataDTO>() {
@@ -103,6 +103,7 @@ public class NewsInfo {
             dest.writeString(video);
             dest.writeString(content);
             dest.writeString(publisher);
+            dest.writeString(newsID);
         }
 
         // Getters and Setters

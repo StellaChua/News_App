@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.news_application.UserInfo;
+import com.example.news_application.entity.UserInfo;
 
 public class UserDbHelper extends SQLiteOpenHelper {
     private static UserDbHelper sHelper;

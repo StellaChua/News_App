@@ -1,4 +1,4 @@
-package com.example.news_application;
+package com.example.news_application.entity;
 
 public class UserInfo {
     private int user_id;
