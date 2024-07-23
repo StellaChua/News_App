@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.Lottie;
@@ -54,6 +55,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
     public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
         NewsInfo.DataDTO dataDTO = mDataDTOList.get(position);
 
+        int textColor = dataDTO.isViewed() ? ContextCompat.getColor(mContext, R.color.grey) : ContextCompat.getColor(mContext, R.color.black);
+        holder.title.setTextColor(textColor);
+        holder.publishTime.setTextColor(textColor);
+        holder.publisher.setTextColor(textColor);
         holder.publishTime.setText(dataDTO.getPublishTime());
         holder.publisher.setText(dataDTO.getPublisher());
         holder.title.setText(dataDTO.getTitle());
@@ -74,6 +79,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
             public void onClick(View v) {
                 if (null != onItemClickListener){
                     onItemClickListener.onItemClick(dataDTO, position);
+                    onViewedNews(dataDTO);
                 }
             }
         });
@@ -176,4 +182,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
     public interface onItemClickListener{
         void onItemClick(NewsInfo.DataDTO dataDTO, int position);
     }
+
+    public void onViewedNews(NewsInfo.DataDTO dataDTO) {
+        dataDTO.setViewed(true);
+        notifyItemChanged(mDataDTOList.indexOf(dataDTO));
+    }
+
 }

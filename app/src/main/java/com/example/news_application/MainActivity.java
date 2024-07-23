@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, SavedListActivity.class);
                     startActivity(intent);
                 }
+                else if(item.getItemId() == R.id.nav_manage_categories){
+                    Intent intent = new Intent(MainActivity.this, ManageCategoriesActivity.class);
+                    startActivity(intent);
+                }
 
                 return true;
             }

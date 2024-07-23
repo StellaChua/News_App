@@ -41,7 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TabNewsFragment extends Fragment {
+public class TabNewsFragment extends Fragment implements onCategoriesUpdatedListener{
     private static final String BASE_URL = "https://api2.newsminer.net/svc/news/queryNewsList";
     private View rootView;
     private RecyclerView recyclerView;
@@ -86,6 +86,11 @@ public class TabNewsFragment extends Fragment {
         args.putString(ARG_SEARCH_QUERY, searchQuery);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCategoriesUpdated(List<String> updatedCategories) {
+        this.categories = updatedCategories;
     }
 
     @Override

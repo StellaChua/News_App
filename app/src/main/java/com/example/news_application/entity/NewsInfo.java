@@ -65,6 +65,7 @@ public class NewsInfo {
         private List<LocationsDTO> locations;
         private List<WhereDTO> where;
         private List<WhoDTO> who;
+        private boolean isViewed;
 
         protected DataDTO(Parcel in) {
             title = in.readString();
@@ -107,6 +108,14 @@ public class NewsInfo {
         }
 
         // Getters and Setters
+
+        public boolean isViewed() {
+            return isViewed;
+        }
+
+        public void setViewed(boolean viewed) {
+            isViewed = viewed;
+        }
 
         public String getImage() {
             return image;
