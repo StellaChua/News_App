@@ -2,6 +2,9 @@ package com.example.news_application.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +35,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
     private List<NewsInfo.DataDTO> mDataDTOList = new ArrayList<>();
     private Context mContext;
     private SavedDbHelper savedDbHelper;
+    private boolean isNetworkAvailable;
+    private SharedPreferences sharedPreferences;
 
     public void setListData(List<NewsInfo.DataDTO> listData){
         this.mDataDTOList = listData;
@@ -41,6 +46,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
     public NewsListAdapter(Context context){
         this.mContext = context;
         this.savedDbHelper = SavedDbHelper.getInstance(context);
+        this.isNetworkAvailable = isNetworkAvailable();
+        this.sharedPreferences = context.getSharedPreferences("NewsPrefs", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -54,6 +61,20 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, @SuppressLint("RecyclerView") int position) {
         NewsInfo.DataDTO dataDTO = mDataDTOList.get(position);
+
+        if (!isNetworkAvailable) {
+            String viewedNewsIDs = sharedPreferences.getString("ViewedNewsIds", "");
+            String[] newsIDs = viewedNewsIDs.split(",");
+            if (newsIDs.length > 0 && newsIDs[0].isEmpty()) {
+                newsIDs = new String[0];
+            }
+            for (String newsID : newsIDs) {
+                if (newsID.equals(dataDTO.getNewsID())) {
+                    dataDTO.setViewed(true);
+                    break;
+                }
+            }
+        }
 
         int textColor = dataDTO.isViewed() ? ContextCompat.getColor(mContext, R.color.grey) : ContextCompat.getColor(mContext, R.color.black);
         holder.title.setTextColor(textColor);
@@ -79,7 +100,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
             public void onClick(View v) {
                 if (null != onItemClickListener){
                     onItemClickListener.onItemClick(dataDTO, position);
-                    onViewedNews(dataDTO);
+                    if (isNetworkAvailable) {
+                        onViewedNews(dataDTO);
+                    }
+                    else {
+                        String viewedNewsIDs = sharedPreferences.getString("ViewedNewsIds", "");
+                        StringBuilder sb = new StringBuilder(viewedNewsIDs);
+                        sb.append(",").append(dataDTO.getNewsID());
+                        sharedPreferences.edit().putString("ViewedNewsIds", sb.toString()).apply();
+                        dataDTO.setViewed(true);
+                        notifyItemChanged(mDataDTOList.indexOf(dataDTO));
+                    }
                 }
             }
         });
@@ -188,4 +219,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.MyHold
         notifyItemChanged(mDataDTOList.indexOf(dataDTO));
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
 }

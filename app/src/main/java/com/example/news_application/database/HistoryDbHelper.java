@@ -38,7 +38,7 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
                 "news_json text" +
                 ")");
 
-
+        db.execSQL("ALTER TABLE history_table ADD COLUMN is_viewed integer");
     }
 
     @Override
@@ -99,5 +99,30 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return list;
+    }
+
+    public boolean isNewsViewed(String newsID) {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "select is_viewed from history_table where newsID=?";
+        String[] selectionArgs = {newsID};
+        Cursor cursor = db.rawQuery(sql, selectionArgs);
+
+        boolean isViewed = false;
+        if (cursor.moveToFirst()) {
+            int isViewedColumnIndex = cursor.getColumnIndex("is_viewed");
+            if (isViewedColumnIndex >= 0) {
+                isViewed = cursor.getInt(isViewedColumnIndex) == 1;
+            }
+        }
+        cursor.close();
+        return isViewed;
+    }
+
+
+    public void setNewsViewed(String newsID, boolean viewed) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_viewed", viewed ? 1 : 0);
+        db.update("history_table", values, "newsID" + "=?", new String[]{newsID});
     }
 }
