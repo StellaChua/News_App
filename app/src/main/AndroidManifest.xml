@@ -18,6 +18,9 @@
         android:theme="@style/Theme.News_Application"
         tools:targetApi="31">
         <activity
+            android:name=".SavedListActivity"
+            android:exported="false" />
+        <activity
             android:name=".HistoryListActivity"
             android:exported="false" />
         <activity

@@ -9,30 +9,30 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.news_application.entity.HistoryInfo;
+import com.example.news_application.entity.SavedInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryDbHelper extends SQLiteOpenHelper {
-    private static HistoryDbHelper sHelper;
-    private static final String DB_NAME = "history.db";
+public class SavedDbHelper extends SQLiteOpenHelper {
+    private static SavedDbHelper sHelper;
+    private static final String DB_NAME = "saved.db";
     private static final int VERSION = 1;
 
-    public HistoryDbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public SavedDbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
-    public synchronized static HistoryDbHelper getInstance(Context context) {
+    public synchronized static SavedDbHelper getInstance(Context context) {
         if (null == sHelper) {
-            sHelper = new HistoryDbHelper(context, DB_NAME, null, VERSION);
+            sHelper = new SavedDbHelper(context, DB_NAME, null, VERSION);
         }
         return sHelper;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table history_table(history_id integer primary key autoincrement, " +
+        db.execSQL("create table saved_table(saved_id integer primary key autoincrement, " +
                 "newsID text," +
                 "username text," +
                 "news_json text" +
@@ -46,8 +46,8 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public int addHistory(String username, String newsID, String news_json) {
-        if (!isHistory(newsID)){
+    public int addSaved(String username, String newsID, String news_json, boolean isBookmarkClicked) {
+        if (!isSaved(newsID) && isBookmarkClicked){
             SQLiteDatabase db = getWritableDatabase();
             ContentValues values = new ContentValues();
 
@@ -56,19 +56,19 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
             values.put("news_json", news_json);
             String nullColumnHack = "values(null,?,?,?)";
 
-            int insert = (int) db.insert("history_table", nullColumnHack, values);
-            db.close();
+            int insert = (int) db.insert("saved_table", nullColumnHack, values);
+ //           db.close();
             return insert;
         }
         return 0;
     }
 
-    //Determine if it is a history
+    //Determine if it is a saved item
     @SuppressLint("Range")
-    public boolean isHistory(String newsID) {
+    public boolean isSaved(String newsID) {
         SQLiteDatabase db = getReadableDatabase();
-        HistoryInfo userInfo = null;
-        String sql = "select history_id,newsID,username,news_json  from history_table where newsID=?";
+        SavedInfo savedInfo = null;
+        String sql = "select saved_id,newsID,username,news_json  from saved_table where newsID=?";
         String[] selectionArgs = {newsID};
         Cursor cursor = db.rawQuery(sql, selectionArgs);
 
@@ -76,28 +76,37 @@ public class HistoryDbHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public List<HistoryInfo> queryHistoryListData(String username) {
+    public List<SavedInfo> querySavedListData(String username) {
         SQLiteDatabase db = getReadableDatabase();
-        List<HistoryInfo> list = new ArrayList<>();
+        List<SavedInfo> list = new ArrayList<>();
         String sql;
         Cursor cursor;
         if (username == null){
-            sql = "select history_id,newsID,username,news_json  from history_table";
+            sql = "select saved_id,newsID,username,news_json  from saved_table";
             cursor = db.rawQuery(sql, null);
         }
         else{
-            sql = "select history_id,newsID,username,news_json  from history_table where username=?";
+            sql = "select saved_id,newsID,username,news_json  from saved_table where username=?";
             cursor = db.rawQuery(sql, new String[]{username});
         }
         while (cursor.moveToNext()) {
-            int history_id = cursor.getInt(cursor.getColumnIndex("history_id"));
+            int saved_id = cursor.getInt(cursor.getColumnIndex("saved_id"));
             String newsID = cursor.getString(cursor.getColumnIndex("newsID"));
             String userName = cursor.getString(cursor.getColumnIndex("username"));
             String news_json = cursor.getString(cursor.getColumnIndex("news_json"));
-            list.add(new HistoryInfo(history_id, newsID, userName, news_json));
+            list.add(new SavedInfo(saved_id, newsID, userName, news_json));
         }
         cursor.close();
         db.close();
         return list;
+    }
+
+    public int deleteSaved(String saved_id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        int delete = db.delete("saved_table", " saved_id=?", new String[]{saved_id});
+
+        db.close();
+        return delete;
     }
 }

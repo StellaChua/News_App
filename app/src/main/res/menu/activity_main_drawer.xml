@@ -10,7 +10,7 @@
             android:title="历史"/>
 "
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_saved"
             android:icon="@drawable/baseline_star_24"
             android:title="收藏" />
         <item

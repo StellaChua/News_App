@@ -1,6 +1,7 @@
 package com.example.news_application;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.example.news_application.entity.NewsInfo;
 import com.example.news_application.entity.UserInfo;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -84,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_history){
                     Intent intent = new Intent(MainActivity.this, HistoryListActivity.class);
+                    startActivity(intent);
+                }
+                else if(item.getItemId() == R.id.nav_saved){
+                    Intent intent = new Intent(MainActivity.this, SavedListActivity.class);
                     startActivity(intent);
                 }
 
