@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.news_application.adapter.CategoriesAdapter;
 import com.example.news_application.adapter.NewsListAdapter;
 import com.example.news_application.database.SavedDbHelper;
 import com.example.news_application.entity.NewsInfo;
@@ -54,6 +55,7 @@ public class TabNewsFragment extends Fragment implements onCategoriesUpdatedList
     private String searchQuery;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int page = 1;
+    private CategoriesAdapter categoriesAdapter;
 
     private Handler mHandler = new Handler(Looper.myLooper()){
         @Override
@@ -90,7 +92,9 @@ public class TabNewsFragment extends Fragment implements onCategoriesUpdatedList
 
     @Override
     public void onCategoriesUpdated(List<String> updatedCategories) {
-        this.categories = updatedCategories;
+        categories.clear();
+        categories.addAll(updatedCategories);
+        categoriesAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -110,6 +114,10 @@ public class TabNewsFragment extends Fragment implements onCategoriesUpdatedList
         rootView = inflater.inflate(R.layout.fragment_tab_news, container, false);
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
         recyclerView = rootView.findViewById(R.id.recyclerView);
+        categoriesAdapter = new CategoriesAdapter(categories);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(categoriesAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
