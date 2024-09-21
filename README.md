@@ -7,4 +7,5 @@
 “Fei Ge News” is an Android application that supports users in browsing the latest reports, searching for trending news, quickly obtaining AI-generated news summaries, and bookmarking news articles. The large model used for generating news summaries is the “Zhipu Qingyan” GLM-4 version. The application requires a minimum Android system version of 9.0 (API 28 or above).
 
 ## 2 Structures
+! [Screenshot of structures of code](https://github.com/StellaChua/News_App/blob/master/app/src/main/Screenshot%20(325).png)
 
