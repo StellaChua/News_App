@@ -10,3 +10,26 @@
 ![Screenshot of structures of code](https://github.com/StellaChua/News_App/blob/master/app/src/main/Screenshot%20(325).png)
 
 ## 3 功能 App Functions
+3.1 登录与注册界面 Login & Register Page </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/LoginPage.png" width="200" height="400"> <img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/Register.png" width="200" height="400"> </br>
+
+3.2 新闻列表、内容与AI生成新闻摘要 News List, Details and AI-Summarized News </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/MainPage.png" width="200" height="400"> <img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/NewsDetailsPage.png" width="200" height="400"> <img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/AINews.png" width="200" height="400"> </br>
+
+3.3 搜索栏与分类筛选 Search Bar & Filter </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/SearchFunction.png" width="200" height="400"> <img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/CategoriesPage.png" width="200" height="400"> </br>
+
+3.4 分类列表 Categories </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/Categories.png" width="200" height="400"> </br>
+
+3.5 历史与收藏记录 History & Saved Items </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/History.png" width="200" height="400"> <img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/Collection.png" width="200" height="400"> </br>
+
+3.6 导航列表 Sidebar Navigation </br>
+
+<img src="https://github.com/StellaChua/News_App/blob/master/app/src/main/SideBar.png" width="200" height="400"> </br>
